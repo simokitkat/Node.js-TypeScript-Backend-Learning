@@ -1,0 +1,7 @@
+-Section 1 → Foundations: What is a JavaScript runtime? (Lessons 1-7)
+-Section 2 → Modules: CommonJS, require(), module.exports (Lessons 8-17)
+-Section 3 → Core Modules: fs, path, http, events, etc. (Lessons 18-36)
+-Section 4 → Internals: Event loop, libuv, non-blocking I/O (Lessons 37-48)
+-Section 5 → npm: Package management, scripts, dependencies (Lessons 49-57)
+-Section 6 → CLI Tools: Build terminal utilities with Node (Lessons 58-60)
+-Section 7 → Miscellaneous: Best practices, debugging, next steps (Lessons 61-64)

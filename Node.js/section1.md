@@ -15,7 +15,6 @@ _A Complete Self-Learning Guide for React/TypeScript Developers_
 6. [Setup & First Program](#setup--first-program)
 7. [Browser vs. Node.js: Key Differences](#browser-vs-nodejs-key-differences)
 8. [Interview Prep Cheat Sheet](#interview-prep-cheat-sheet)
-9. [Quick Reference & Verification Scripts](#quick-reference--verification-scripts)
 
 ## Why Learn Node.js?
 
