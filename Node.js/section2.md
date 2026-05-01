@@ -337,5 +337,3 @@ const config = Object.freeze(require("./config.json"));
 // Explicit extension to avoid .js collision
 const data = require("./data.json"); // ✅ Always explicit
 ```
-
-.
