@@ -24,7 +24,7 @@ const isAbsolute = path.isAbsolute(__filename);
 console.log("IS ABSOLUTE PATH", isAbsolute);
 console.log("IS ABSOLUTE PATH", path.isAbsolute("./data.json"));
 
-// normalizing paths using join
+// NORMALIZING PATHS USING JOIN
 console.log(
   "ADDING UNIX SEPARATOR TO CHECK ON WINDOWS",
   path.join("/folder1", "//folder2", "../index.html"),
@@ -34,14 +34,14 @@ console.log(
   path.join("\\folder1", "\\\\\\\\folder2", "\\index.html"),
 );
 
-// normalizing paths as absolute  paths using resolve
+// NORMALIZING PATHS AS ABSOLUTE  PATHS USING RESOLVE
 console.log(
   "ABSOLUTE PATH USING RESOLVE",
   path.resolve("folder1", "folder2", "index.html"),
 );
 
-// normalizing paths using normalize
+// NORMALIZING PATHS USING NORMALIZE
 console.log(
-  "NORMALIZE A path using normalize",
+  "NORMALIZE A PATH USING NORMALIZE",
   path.normalize("/folder1//folder2/index.html"),
 );
