@@ -1,7 +1,6 @@
 import EventEmitter from "node:events";
 import crypto from "node:crypto";
-
-import { Message, MessageType, UserEventType } from "./types";
+import { Message, MessageType } from "./types";
 
 export class MessageSystem extends EventEmitter {
   private users = new Set<string>();
@@ -29,8 +28,22 @@ export class MessageSystem extends EventEmitter {
     return Array.from(this.users);
   }
 
-  sendMessage(type: MessageType, content: string, sender?: string) {
-    const message = {
+  sendMessage(type: MessageType, content: string, sender: string) {
+    if (!this.users.has(sender)) {
+      const alertMsg: Message = {
+        id: crypto.randomUUID(),
+        type: "alert",
+        content: "Please join the chat first",
+        timestamp: new Date(),
+        sender,
+      };
+
+      this.emit("alert", alertMsg);
+
+      return;
+    }
+
+    const message: Message = {
       id: crypto.randomUUID(),
       type,
       content,
@@ -39,23 +52,21 @@ export class MessageSystem extends EventEmitter {
     };
 
     this.messages.push(message);
+
     this.emit(type, message);
+    this.emit("new-message", message);
   }
 
   subscribeToType(type: MessageType, callback: (msg: Message) => void) {
     this.on(type, callback);
   }
 
-  subscribeToMessages(
-    type: MessageType | UserEventType,
-    callback: (msg: Message) => void,
-  ) {
-    this.on(type, callback);
+  subscribeToMessages(callback: (msg: Message) => void) {
+    this.on("new-message", callback);
   }
 
   getMessageHistory() {
-    const last10 = this.messages.slice(-10);
-    return last10;
+    return this.messages.slice(-10);
   }
 
   clearHistory() {
@@ -69,5 +80,3 @@ export class MessageSystem extends EventEmitter {
     };
   }
 }
-
-console.log("Task 1..");
