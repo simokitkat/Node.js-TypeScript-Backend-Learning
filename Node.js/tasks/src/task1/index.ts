@@ -1,4 +1,4 @@
-import { MessageSystem } from "./task1";
+import { MessageSystem } from "./messageSystem";
 
 const chat = new MessageSystem();
 
