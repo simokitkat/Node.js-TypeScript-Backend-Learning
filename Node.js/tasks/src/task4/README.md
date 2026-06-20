@@ -148,14 +148,6 @@ DELETE /todos/2 -> 200 OK (deleted todo: id=2)
 GET /todos/999 -> 404 Not Found
 ```
 
-## Document Your Work
-
-After completing all previous steps, you must document your work in the file `solutions/task-04.txt`:
-
-- Include a brief description of your implementation
-- Explain how to run your solution
-- Provide `.js` files with your implementations
-
 ## Bonus Points
 
 - Add request logging middleware
