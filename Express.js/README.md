@@ -33,8 +33,8 @@ npm init -y
 # Core framework
 npm i express
 
-# Development tool for auto-restarting on file changes
-npm i -D nodemon
+# TypeScript runtime and type checking
+npm i -D typescript tsx @types/node
 ```
 
 ### ⚙️ Configuration (`package.json`)
@@ -45,21 +45,22 @@ Update your `package.json` with:
 {
   "type": "module",
   "scripts": {
-    "start:dev": "nodemon src/index.mjs",
-    "start": "node src/index.mjs"
+    "start:dev": "tsx --watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
   }
 }
 ```
 
 - `"type": "module"` enables ES Modules (`import`/`export`) instead of CommonJS (`require`/`module.exports`).
-- ES Modules require the `.mjs` file extension in Node.js.
-- `start:dev`: Uses `nodemon` to watch files and auto-restart during development.
-- `start`: Uses standard `node` for production deployments.
+- `start:dev`: Uses `tsx --watch` to run TypeScript directly and auto-restart during development.
+- `start`: Uses `tsx` to run TypeScript directly for production.
+- `typecheck`: Runs TypeScript type checking without emitting files (useful for CI).
 
-### 💻 Server Entry Point (`src/index.mjs`)
+### 💻 Server Entry Point (`src/index.ts`)
 
-```javascript
-import express from "express";
+```typescript
+import express, { Request, Response } from "express";
 
 // Initialize Express application
 const app = express();
@@ -74,6 +75,7 @@ app.listen(port, () => {
 ```
 
 - `express` is a top-level function. Calling it creates the app instance.
+- `Request` and `Response` are Express types for type-safe route handlers.
 - `process` is a global Node.js object. `process.env.PORT` accesses runtime environment variables.
 - The `||` operator provides a fallback value (`3000`) if `PORT` is undefined.
 - The `app.listen()` callback runs after the server successfully starts (useful for logging or startup hooks).
@@ -156,21 +158,21 @@ res.status(201).send({ message: "Resource created" });
   - Example: `/api/users`, `/api/products` instead of `/users`, `/products`.
 - Keep route paths descriptive and RESTful.
 
-### Complete Code Examples (`src/index.mjs`)
+### Complete Code Examples (`src/index.ts`)
 
-```javascript
-import express from "express";
+```typescript
+import express, { Request, Response } from "express";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Base route
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("hello world");
 });
 
 // Users endpoint
-app.get("/api/users", (req, res) => {
+app.get("/api/users", (req: Request, res: Response) => {
   res.send([
     { id: 1, username: "ansen", displayName: "Anson" },
     { id: 2, username: "jack", displayName: "Jack" },
@@ -179,7 +181,7 @@ app.get("/api/users", (req, res) => {
 });
 
 // Products endpoint
-app.get("/api/products", (req, res) => {
+app.get("/api/products", (req: Request, res: Response) => {
   res.send([
     { id: 1, name: "chicken breast", price: "$12.99" },
     { id: 2, name: "chicken breast", price: "$12.99" },
