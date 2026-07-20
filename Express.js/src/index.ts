@@ -1,9 +1,16 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+const loggingMiddleWare = (req: Request, res: Response, next: NextFunction) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+};
+
+app.use(loggingMiddleWare);
 
 const users = [
   {
