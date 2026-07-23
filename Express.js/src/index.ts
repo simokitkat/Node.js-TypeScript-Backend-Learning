@@ -6,7 +6,24 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const loggingMiddleWare = (req: Request, res: Response, next: NextFunction) => {
-  console.log(`${req.method} ${req.url}`);
+  console.log(`${req.method} ${req.url} FROM THE LOGGING MIDDLEWARE`);
+  next();
+};
+
+const resolveIndexByUserIdMiddleWare = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { userId } = req.params;
+
+  const index = users.findIndex((user) => user.id === Number(userId));
+
+  if (index === -1) {
+    return res.send(`<h1>The user you asked for doesn't exist.</h1>`);
+  }
+
+  (req as Request & { index: number }).index = index;
   next();
 };
 
@@ -94,16 +111,12 @@ app.post("/users", (req, res) => {
 });
 
 // PUT
-app.put("/users/:userId", (req, res) => {
-  const { userId } = req.params;
-
-  const index = users.findIndex((user) => user.id === Number(userId));
+app.put("/users/:userId", resolveIndexByUserIdMiddleWare, (req, res) => {
+  const { index } = req as Request & { index: number };
 
   const { name } = req.body;
 
-  if (index === -1) {
-    res.send(`<h1>The user you asked for doesn't exist.</h1>`);
-  } else if (!name) {
+  if (!name) {
     res.send(`<h1>Name is required</h1>`);
   } else {
     const requiredUser = users[index];
@@ -119,16 +132,12 @@ app.put("/users/:userId", (req, res) => {
 });
 
 // PATCH
-app.patch("/users/:userId", (req, res) => {
-  const { userId } = req.params;
-
-  const index = users.findIndex((user) => user.id === Number(userId));
+app.patch("/users/:userId", resolveIndexByUserIdMiddleWare, (req, res) => {
+  const { index } = req as Request & { index: number };
 
   const { name } = req.body;
 
-  if (index === -1) {
-    res.send(`<h1>The user you asked for doesn't exist.</h1>`);
-  } else if (!name) {
+  if (!name) {
     res.send(`<h1>Name is required</h1>`);
   } else {
     const requiredUser = users[index];
@@ -142,17 +151,11 @@ app.patch("/users/:userId", (req, res) => {
 });
 
 // DELETE
-app.delete("/users/:userId", (req, res) => {
-  const { userId } = req.params;
+app.delete("/users/:userId", resolveIndexByUserIdMiddleWare, (req, res) => {
+  const { index } = req as Request & { index: number };
 
-  const index = users.findIndex((user) => user.id === Number(userId));
-
-  if (index === -1) {
-    res.send(`<h1>The user you asked for doesn't exist.</h1>`);
-  } else {
-    users.splice(index, 1);
-    res.send(`<h1>User with id ${userId} has been deleted.</h1>`);
-  }
+  users.splice(index, 1);
+  res.send(`<h1>User with id ${req.params.userId} has been deleted.</h1>`);
 });
 
 app.listen(PORT, () => {
